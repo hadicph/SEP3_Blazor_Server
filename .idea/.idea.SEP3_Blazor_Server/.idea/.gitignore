@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/projectSettingsUpdater.xml
+/modules.xml
+/.idea.SEP3_Blazor_Server.iml
+/contentModel.xml
+# Datasource local storage ignored files
+/../../../../../../../../:\Users\Hadi\RiderProjects\SEP3_Blazor_Server\.idea\.idea.SEP3_Blazor_Server\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
