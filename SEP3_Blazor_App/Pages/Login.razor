@@ -1,0 +1,59 @@
+﻿@page "/login" 
+@using SEP3_Blazor_App.Models
+@namespace LoginComponent
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+<h5>Login Form:</h5>
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="form-group">
+            <label>CPR Nb:</label> <input type="text" placeholder="CPR Number" @bind-value="userid"/>
+        </div>
+        <div class="form-group">
+            <label>Password</label> <input type="password" placeholder="password" @bind-value="password"/>
+        </div>
+        <div style="color:#ff0000">@errorMessage</div> <a href="" @onclick="PerformLogin"> Login </a>
+    </NotAuthorized>
+    <Authorized>
+        <a href="" @onclick="PerformLogout"> Log out </a>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private string userid;
+    private string password;
+    private string errorMessage;
+
+    public async Task PerformLogin()
+    {
+        errorMessage = "";
+        try
+        {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).ValidateLogin(userid, password);
+            userid = "";
+            password = "";
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            errorMessage = e.Message;
+        }
+    }
+
+    public async Task PerformLogout()
+    {
+        errorMessage = "";
+        userid = "";
+        password = "";
+        try
+        {
+            ((CustomAuthenticationStateProvider) AuthenticationStateProvider).Logout();
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+        }
+    }
+
+}

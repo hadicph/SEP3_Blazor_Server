@@ -5,9 +5,9 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using SEP3_Blazor_Server.Data.Services;
+using SEP3_Blazor_App.Data.Services.User;
 
-namespace SEP3_Blazor_Server.Models
+namespace SEP3_Blazor_App.Models
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
@@ -30,7 +30,7 @@ namespace SEP3_Blazor_Server.Models
                 if (!string.IsNullOrEmpty(userAsJson))
                 {
                     User tmp = JsonSerializer.Deserialize<User>(userAsJson);
-                    ValidateLogin(tmp.UserName, tmp.Password);
+                    ValidateLogin(tmp.UserId, tmp.Password);
                 }
             }
             else
@@ -42,18 +42,18 @@ namespace SEP3_Blazor_Server.Models
             return await Task.FromResult(new AuthenticationState(cachedClaimsPrincipal));
         }
 
-        public void ValidateLogin(string username, string password)
+        public async void ValidateLogin(string userid, string password)
         {
             Console.WriteLine("Validating log in");
-            if (string.IsNullOrEmpty(username)) throw new Exception("Enter username");
+            if (string.IsNullOrEmpty(userid)) throw new Exception("Enter CPR Nb");
             if (string.IsNullOrEmpty(password)) throw new Exception("Enter password");
             ClaimsIdentity identity = new ClaimsIdentity();
             try
             {
-                User user = userService.ValidateUser(username, password);
+                User user = await userService.ValidateUser(userid, password);
                 identity = SetupClaimsForUser(user);
                 string serialisedData = JsonSerializer.Serialize(user);
-                jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
+                await jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
                 cachedUser = user;
             }
             catch (Exception e)
@@ -75,7 +75,7 @@ namespace SEP3_Blazor_Server.Models
         private ClaimsIdentity SetupClaimsForUser(User user)
         {
             List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Name, user.UserId));
             claims.Add(new Claim("Role", user.Role));
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;

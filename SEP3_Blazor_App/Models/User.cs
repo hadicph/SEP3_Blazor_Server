@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace SEP3_Blazor_Server.Models
+namespace SEP3_Blazor_App.Models
 {
     public class User
     {
@@ -10,50 +10,46 @@ namespace SEP3_Blazor_Server.Models
         {
         }
 
-        public User(string username, string password)
+        public User(string userId, string password)
         {
-            UserName = username;
+            UserId = userId;
             Password = password;
-
         }
 
-        [Required]
-        [JsonPropertyName("username")]
-        public String UserName { get; set; }
+        public User(string userid, string password,string role)
+        {
+            UserId = userid;
+            Password = password;
+            Role = role;
+        }
+
+        [Required(ErrorMessage = "CPR N0 is required")]
+        [MaxLength(11, ErrorMessage = "Must not be less or greater than 10/11 characters")]
+        [JsonPropertyName("userid")]
+        public String UserId { get; set; }
         [Required]
         [JsonPropertyName("password")]
         public String Password { get; set; }
         [JsonPropertyName("role")]
         public String Role { get; set; }
-        
-        
-        // public int Id { get; set; }
-        // [Required(ErrorMessage = "CPR N0 is required")]
-        // [MaxLength(11, ErrorMessage = "Must not be less or greater than 10/11 characters")]
-        // public string userId { get; set; }
-        // [Required(ErrorMessage = "First Name is required")]
-        // public string firstName { get; set; }
-        // [Required(ErrorMessage = "Last Name is required")]
-        // public string lastName { get; set; }
-        // [Required]
-        // [DataType(DataType.EmailAddress)]
-        // [EmailAddress]
-        // public string emailAddress { get; set; }
-        // [Required(ErrorMessage = "Password is required")]
-        // [MinLength(6, ErrorMessage = "Password Minimum length must be 6")]
-        // public string password { get; set; }
-        // [Required(ErrorMessage = "Phone Contact is required")]
-        // public string contact { get; set; }
-        // public string gender { get; set; }
-        // [Required(ErrorMessage = "Address is required")]
-        // public string address { get; set; }
-        // public string dept { get; set; }
-        // public string doctorId { get; set; }
-        // public string symptoms { get; set; }
-        // public string status { get; set; }
-        // public string token { get; set; }
-        // public string role { get; set; }
-        
-        
+        [Required(ErrorMessage = "First Name is required")]
+        [JsonPropertyName("firstname")]
+        public string FirstName { get; set; }
+        [Required(ErrorMessage = "Last Name is required")]
+        [JsonPropertyName("lastname")]
+        public string LastName { get; set; }
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
+        [JsonPropertyName("emailaddress")]
+        public string EmailAddress { get; set; }
+        [Required(ErrorMessage = "Phone Contact is required")]
+        [JsonPropertyName("phonenb")]
+        public string PhoneNb { get; set; }
+        [JsonPropertyName("gender")]
+        public string Gender { get; set; }
+        [Required(ErrorMessage = "Address is required")]
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
     }
 }

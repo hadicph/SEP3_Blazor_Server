@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SEP3_Blazor_App.Areas.Identity;
 using SEP3_Blazor_App.Data;
+using SEP3_Blazor_App.Data.Services.User;
+using SEP3_Blazor_App.Models;
 
 namespace SEP3_Blazor_App
 {
@@ -42,7 +44,19 @@ namespace SEP3_Blazor_App
                 .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>
                 >();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("onlyPatient", a => a.RequireAuthenticatedUser().RequireClaim("Role", "patient"));
+                options.AddPolicy("onlyDoctor", a => a.RequireAuthenticatedUser().RequireClaim("Role", "doctor"));
+                options.AddPolicy("onlyAdmin", a => a.RequireAuthenticatedUser().RequireClaim("Role", "admin"));
+                options.AddPolicy("patient", a => a.RequireAuthenticatedUser().RequireClaim("Role", "patient","doctor","admin"));
+                options.AddPolicy("doctor", a => a.RequireAuthenticatedUser().RequireClaim("Role", "doctor","admin"));
+                options.AddPolicy("admin", a => a.RequireAuthenticatedUser().RequireClaim("Role", "admin"));
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
