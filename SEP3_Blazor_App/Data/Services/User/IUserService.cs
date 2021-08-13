@@ -10,5 +10,7 @@ namespace SEP3_Blazor_App.Data.Services.User
         Task<List<Models.User>> GetAllUsers();
         Task<bool> DeleteUser(string userid);
         Task<List<Case>> GetCasesForSpecificUser(string userid);
+        Task<bool> AddUser(Models.User user);
+        Task<Models.User> LoadData(string userid);
     }
 }

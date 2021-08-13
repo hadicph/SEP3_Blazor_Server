@@ -10,8 +10,8 @@
 <div class="row">
         <div class="col-md-6 mb-4">
             <form class="form-inline md-form mr-auto">
-                <input class="form-control mr-sm-2" type="text" placeholder="Enter Patient CPR Nb" @bind-value="userId" /> 
-                <a href="users_records" @onclick="ReloadCases"> Search </a>
+                <input class="form-control mr-sm-2" type="text" placeholder="Enter Patients CPR Nb" @bind-value="userId" /> 
+                <a href="users_records" @onclick="LoadData"> Search </a>
             </form>
         </div>
     </div>
@@ -20,56 +20,21 @@
     <div class="row">
             <div class="col-6">
                 <label>First Name:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
+                <input type="text" class="form-control" disabled="disabled" @bind-value="user.FirstName" />
             </div>
             <div class="col-6">
                 <label>Last Name:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
+                <input type="text" class="form-control" disabled="disabled" @bind-value="user.LastName" />
             </div>
     </div>
     <div class="row">
-            <div class="col-4">
-                <label>Gender:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
-            </div>
-            <div class="col-4">
-                <label>Phone Number:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
-            </div>
-            <div class="col-4">
-                <label>Email:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
-            </div>
+    <div class="col-4">
+        <label>Gender:</label>
+        <input type="text" class="form-control" disabled="disabled" @bind-value="user.PhoneNb" />
     </div>
-    <div class="row">
-            <div class="col-6">
-                <label>Date of Birth:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
-            </div>
-            <div class="col-6">
-                <label>Age:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
-            </div>
     </div>
-    <div class="row">
-            
-            <div class="col-12">
-                <label>Address:</label>
-                <input type="text" class="form-control" disabled="disabled" value="" />
-            </div>
-    </div>
-<hr />
-    <h2>Medical History</h2>
-    <div class="row">
-        <div class="col-6">
-            <label>Patients Diagnosed With:</label>
-            <input type="text" class="form-control" disabled="disabled" value="" />
-        </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-6">
-            <label>Cases History:</label>
+    <hr />
+<label>Medical History:</label>
             <table class="table">
                 <thead>
                     <tr>
@@ -98,19 +63,17 @@
                                 }
                 </tbody>
             </table>
-        </div>
-    </div>
-    <br />
 @code {
     private String userId;
+    private User user = new User();
     private Case _case;
     private List<Case> caseList = new List<Case>();
     public string AddMessage { get; set; }
 
-    private async Task ReloadCases()
+    private async Task LoadData()
     {
+        user = await UserService.LoadData(userId);
         caseList = await UserService.GetCasesForSpecificUser(userId);
     }
-    
 
 }

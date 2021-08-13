@@ -38,18 +38,8 @@ namespace SEP3_Blazor_App.Models
         [Required(ErrorMessage = "Last Name is required")]
         [JsonPropertyName("lastname")]
         public string LastName { get; set; }
-        [Required]
-        [DataType(DataType.EmailAddress)]
-        [EmailAddress]
-        [JsonPropertyName("emailaddress")]
-        public string EmailAddress { get; set; }
         [Required(ErrorMessage = "Phone Contact is required")]
         [JsonPropertyName("phonenb")]
         public string PhoneNb { get; set; }
-        [JsonPropertyName("gender")]
-        public string Gender { get; set; }
-        [Required(ErrorMessage = "Address is required")]
-        [JsonPropertyName("address")]
-        public string Address { get; set; }
     }
 }

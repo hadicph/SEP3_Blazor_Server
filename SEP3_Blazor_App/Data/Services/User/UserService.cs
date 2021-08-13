@@ -88,5 +88,39 @@ namespace SEP3_Blazor_App.Data.Services.User
                 return null;
             }
         }
+
+        public async Task<bool> AddUser(Models.User user)
+        {
+            String serializedUser = JsonSerializer.Serialize(user);
+            StringContent content = new StringContent(serializedUser, Encoding.UTF8, "application/json");
+            HttpResponseMessage responseMessage = await Client.PostAsync(Uri + "/adduser",  content);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                Console.WriteLine("User Added");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine($@"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
+                return false;
+            } 
+        }
+
+        public async Task<Models.User> LoadData(string userid)
+        {
+            HttpResponseMessage responseMessage = await Client.GetAsync(Uri + "/loaddata/" + userid);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                string result = await responseMessage.Content.ReadAsStringAsync(); 
+                Models.User deserializedUser = JsonSerializer.Deserialize<Models.User>(result,
+                    new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+                return deserializedUser;
+            }
+            else
+            {
+                Console.WriteLine($@"Error: {responseMessage.StatusCode}, {responseMessage.ReasonPhrase}");
+                return null;
+            }
+        }
     }
 }

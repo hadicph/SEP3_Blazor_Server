@@ -1,0 +1,57 @@
+﻿@page "/Add_User"
+@using SEP3_Blazor_App.Models
+@using SEP3_Blazor_App.Data.Services.User
+
+@inject NavigationManager NavigationManager
+@inject IUserService UserService
+@attribute [Authorize(policy:"admin")]
+
+<h3>Add User</h3>
+<div class="row">
+            <div class="col-6">
+                <label>CPR Nb:</label>
+                <input type="text" class="form-control"  @bind-value="user.UserId" />
+            </div>
+            <div class="col-6">
+                <label>Password:</label>
+                <input type="text" class="form-control"  @bind-value="user.Password" />
+            </div>
+    </div>
+<div class="row">
+            <div class="col-6">
+                <label>First Name:</label>
+                <input type="text" class="form-control"  @bind-value="user.FirstName" />
+            </div>
+            <div class="col-6">
+                <label>Last Name:</label>
+                <input type="text" class="form-control"  @bind-value="user.LastName" />
+            </div>
+    </div>
+<div class="row">
+    <div class="col-4">
+        <label>Role:</label>
+        <input type="text" class="form-control"  @bind-value="user.Role" />
+    </div>
+    <div class="col-4">
+        <label>Phone Number:</label>
+        <input type="text" class="form-control"  @bind-value="user.PhoneNb" />
+    </div>
+</div>
+<a href="" @onclick="AddUser"> Add User </a>
+@code {
+    private User user = new User();
+    private async Task AddUser()
+    {
+        user.Role = "user";
+        bool response = await UserService.AddUser(user);
+        if (response)
+        {
+            Console.WriteLine("User Added");
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            Console.WriteLine("User not added");
+        }
+    }
+}
