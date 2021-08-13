@@ -1,4 +1,5 @@
 ﻿@page "/Patients"
+@attribute [Authorize(policy:"doctor")]
 <h3>Patients</h3>
 
 @code {
